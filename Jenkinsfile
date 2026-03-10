@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     options {
-        buidDiscarder(logRotator(numToKeepStr:'5'))
+    buildDiscarder(logRotator(numToKeepStr:'5'))
     }
 
-    enviroment{
-        AWS_ACCESS_KEY_ID = credentials('aws-access-key')
-        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
+    environment {
         DOCKER_CREDS = credentials('dockerhub-creds')
-        AWS_REGION = "us-east-1"
+        AWS_ACCESS_KEY_ID = credentials('aws-creds')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-creds')
+        AWS_REGION = "eu-west-1"
     }
 
     stages {
@@ -17,12 +17,14 @@ pipeline {
             steps {
                sh '''
                 docker --version
-                docker composer --version
+                docker compose version
                 aws --version
+                aws sts get-caller-identity
+
                 '''
             }
         }
-        stage('buid') {
+        stage('Buid') {
             steps {
                 echo 'Testing..'
                 sh 'docker context use default'
@@ -33,6 +35,8 @@ pipeline {
         }
         stage('Deploy') {
             steps {
+
+                sh 'echo  deploying'
               
             }
         }
