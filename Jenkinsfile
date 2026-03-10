@@ -10,7 +10,7 @@ pipeline {
         AWS_ACCESS_KEY_ID = credentials('aws-creds')
         AWS_SECRET_ACCESS_KEY = credentials('aws-creds')
         AWS_REGION = "eu-west-1"
-        TASK_DEFINITION = "task-definition"
+        TASK_DEFINITION = "task-definition.json"
         SUBNET_ID = "subnet-0722f338ba30430ee"
         SECURITY_GROUP = "nginx-security-group"
     }
@@ -43,6 +43,9 @@ pipeline {
                 sh 'echo  deploying'
 
                   sh '''
+
+                  echo TASK_DEFINITION
+                  
                 aws ecs create-service \
                   --cluster test-cluster \
                   --service-name  test-service\
