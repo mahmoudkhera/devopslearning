@@ -1,0 +1,7 @@
+version: "3.9"
+
+services:
+  billing-app:
+    image: mahmoudkhera/fronteend:latest
+    ports:
+      - "8081:8080"
