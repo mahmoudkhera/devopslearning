@@ -1,7 +1,40 @@
-version: "3.9"
 
 services:
-  billing-app:
-    image: mahmoudkhera/fronteend:latest
+
+  backend:
+    build: ./backend
+    container_name: inventory-backend
+    restart: on-failure
     ports:
-      - "8081:8080"
+      - "4000:4000"
+    volumes:
+      - sqlite-data:/app/data
+    environment:
+      - PORT=4000
+    networks:
+      - inventory-net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:4000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    build: ./frontend
+    container_name: inventory-frontend
+    restart: on-failure
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - API_URL=http://localhost:4000   # browser-accessib
+    networks:
+      - inventory-net
+
+volumes:
+  sqlite-data:
+    driver: local
+
+networks:
+  inventory-net:
+    driver: bridge
