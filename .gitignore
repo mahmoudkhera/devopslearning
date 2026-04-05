@@ -1,1 +1,6 @@
-bastionkey.pem
+/backend/node_modules
+/backend/.env
+/ansible_config
+/infrastructure/.terraform
+/infrastructure/ec2-key.pem
+/infrastructure/terraform*

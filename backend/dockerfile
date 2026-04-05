@@ -7,13 +7,12 @@ RUN apk add --no-cache python3 make g++
 
 # Install dependencies first (layer caching)
 COPY package.json .
+COPY .env .
 RUN npm install
 
 # Copy source
 COPY server.js .
 
-# SQLite data lives here — mount a volume to persist it
-VOLUME ["/app/data"]
 
 EXPOSE 4000
 

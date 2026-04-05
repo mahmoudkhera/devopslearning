@@ -3,6 +3,7 @@ services:
 
   backend:
     build: ./backend
+    image: mahmoudkhera/backend:test
     container_name: inventory-backend
     restart: on-failure
     ports:
@@ -11,6 +12,7 @@ services:
       - sqlite-data:/app/data
     environment:
       - PORT=4000
+      - BACK_END_API=${api_url}
     networks:
       - inventory-net
     healthcheck:
@@ -21,6 +23,7 @@ services:
 
   frontend:
     build: ./frontend
+    image: mahmoudkhera/frontend:test
     container_name: inventory-frontend
     restart: on-failure
     ports:
