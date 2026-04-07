@@ -1,7 +1,7 @@
 #ALB
 
 
-resource "aws_lb" "internal_alb" {
+resource "aws_lb" "main" {
     name  = "${var.environment}-alb"
     internal =true
 
@@ -11,14 +11,14 @@ resource "aws_lb" "internal_alb" {
     enable_deletion_protection = false
 
      tags = {
-    Name        = "${var.environment}-alb"
+    Name        = "${var.name}-alb"
     Environment = var.environment
   }
 }
 
 
 resource "aws_lb_target_group" "front" {
-  name     = "${var.environment}-tg"
+  name     = "front-tg"
   port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
@@ -36,7 +36,7 @@ resource "aws_lb_target_group" "front" {
   }
 
   tags = {
-    Name        = "${var.environment}-tg"
+    Name        = "${var.name}-tg"
     Environment = var.environment
   }
 }
@@ -48,6 +48,6 @@ resource "aws_lb_listener" "internal_alb" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.internal_alb.arn
+    target_group_arn = aws_lb_target_group.front.arn
   }
 }

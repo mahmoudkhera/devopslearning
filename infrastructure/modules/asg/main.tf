@@ -19,7 +19,7 @@ resource "aws_launch_template" "main" {
   tag_specifications {
     resource_type = "instance"
     tags = {
-      Name        = "${var.environment}-web-instance"
+      Name        = "${var.name}-instance"
       Environment = var.environment
     }
   }
@@ -28,10 +28,10 @@ resource "aws_launch_template" "main" {
 }
 
 resource "aws_autoscaling_group" "main" {
-  name                = "${var.environment}-asg"
+  name                = "${var.name}-asg"
   vpc_zone_identifier = var.private_subnet_ids
   target_group_arns   = var.target_group_arns
-  health_check_type   = "ELB"
+  health_check_type   = "EC2"
   health_check_grace_period = 300
 
   min_size         = var.min_size
@@ -45,7 +45,7 @@ resource "aws_autoscaling_group" "main" {
 
   tag {
     key                 = "Name"
-    value               = "${var.environment}-web-instance"
+    value               = "${var.name}-instance"
     propagate_at_launch = true
   }
 

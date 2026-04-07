@@ -2,20 +2,10 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Install build tools needed for better-sqlite3 native bindings
-RUN apk add --no-cache python3 make g++
-
-# Install dependencies first (layer caching)
-COPY package.json .
-COPY .env .
+# No need for python3, make, g++
+COPY package.json ./
 RUN npm install
 
-# Copy source
-COPY server.js .
-
-
-EXPOSE 4000
-
-ENV PORT=4000
+COPY server.js ./
 
 CMD ["node", "server.js"]

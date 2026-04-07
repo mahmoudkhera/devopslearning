@@ -13,9 +13,21 @@ variable "public_subnets" {
   type        = list(string)
 }
 
-variable "private_subnets" {
-  description = "List of private subnet CIDR blocks"
-  type        = list(string)
+variable "nginx_subnets"{
+  description ="cider blocks for internal load balancer"
+  type  =list(string)
+  
+}
+
+variable "internal_alb_subnets"{
+  description ="cider blocks for internal load balancer"
+  type  =list(string)
+  
+}
+variable "front_subnets"{
+  description ="cider blocks for internal load balancer"
+  type  =list(string)
+  
 }
 
 variable "azs" {

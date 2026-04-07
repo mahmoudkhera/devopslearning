@@ -9,7 +9,11 @@ variable "environment" {
   type        = string
   default     = "dev"
 }
-
+variable "name" {
+  description = "name of resource in aws"
+  type        = string
+  default     = "dev"
+}
 variable "vpc_cidr" {
   description = "CIDR block for VPC"
   type        = string
@@ -22,10 +26,12 @@ variable "public_subnets" {
   default     = ["192.168.1.0/24", "192.168.2.0/24"]
 }
 
-variable "private_subnets" {
-  description = "CIDR blocks for private subnets"
-  type        = list(string)
-  default     = ["192.168.3.0/24", "192.168.4.0/24"]
+
+
+variable "nginx_subnets"{
+  description ="cider blocks for internal load balancer"
+  type  =list(string)
+  default=["192.168.3.0/24", "192.168.4.0/24"]
 }
 
 variable "internal_alb_subnets"{
@@ -33,7 +39,11 @@ variable "internal_alb_subnets"{
   type  =list(string)
   default=["192.168.5.0/24", "192.168.6.0/24"]
 }
-
+variable "front_subnets"{
+  description ="cider blocks for internal load balancer"
+  type  =list(string)
+  default=[ "192.168.7.0/24"]
+}
 variable "availability_zones" {
   description = "Availability zones"
   type        = list(string)
@@ -86,13 +96,24 @@ variable "bastion_cider" {
 }
 
 
-variable "user_data_template_path" {
+variable "nginx_user_data" {
   description = "Path to user data template file"
   type        = string
-  default = "./user_data.sh.tpl"
+  default = "./templates/nginx_user_data.sh.tpl"
 }
 
-variable "user_data_vars" {
+variable "nginx_user_data_vars" {
+  description = "Variables to pass into user data template"
+  type        = map(string)
+  default     = {}
+}
+
+variable "front_user_data" {
+  description = "Path to user data template file"
+  type        = string
+  default = "./templates/front_user_data.sh.tpl"
+}
+variable "front_user_data_vars" {
   description = "Variables to pass into user data template"
   type        = map(string)
   default     = {}

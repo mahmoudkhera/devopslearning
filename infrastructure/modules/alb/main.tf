@@ -2,7 +2,7 @@
 
 
 resource "aws_lb" "main" {
-    name  = "${var.environment}-alb"
+    name  = "public-alb"
     internal =false
 
     load_balancer_type="application"

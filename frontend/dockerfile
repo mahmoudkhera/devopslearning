@@ -5,8 +5,6 @@ WORKDIR /app
 COPY server.js .
 COPY index.html .
 
-EXPOSE 3000
-ENV PORT=3000
-ENV API_URL=http://backend:4000
+
 
 CMD ["node", "server.js"]

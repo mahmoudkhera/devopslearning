@@ -1,20 +1,16 @@
-
 services:
-
   backend:
     build: ./backend
-    image: mahmoudkhera/backend:test
+    image: mahmoudkhera/backend
     container_name: inventory-backend
     restart: on-failure
     ports:
       - "4000:4000"
-    volumes:
-      - sqlite-data:/app/data
     environment:
+      - BACK_END_API=0.0.0.0
       - PORT=4000
-      - BACK_END_API=${api_url}
-    networks:
-      - inventory-net
+      - DATABASE_URL=postgresql://neondb_owner:npg_hvPKynr4qZt9@ep-late-snow-ags00p3q-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=verify-full
+    
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:4000/api/health"]
       interval: 10s
@@ -23,21 +19,16 @@ services:
 
   frontend:
     build: ./frontend
-    image: mahmoudkhera/frontend:test
+    image: mahmoudkhera/frontend
     container_name: inventory-frontend
     restart: on-failure
     ports:
       - "3000:3000"
     environment:
+      - HOST=0.0.0.0
       - PORT=3000
-      - API_URL=http://localhost:4000   # browser-accessib
-    networks:
-      - inventory-net
+      # CHANGE THIS: Use localhost because your browser is the one making the request
+      - API_URL=http://localhost:4000
+    
 
-volumes:
-  sqlite-data:
-    driver: local
 
-networks:
-  inventory-net:
-    driver: bridge

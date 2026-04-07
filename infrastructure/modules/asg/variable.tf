@@ -4,6 +4,11 @@ variable "environment" {
   description = "Environment name"
   type        = string
 }
+variable "name" {
+  description = "name on the aws  name"
+  type        = string
+}
+
 
 variable "vpc_id" {
   description = "VPC ID"
@@ -60,5 +65,5 @@ variable "user_data_template_path" {
 variable "user_data_vars" {
   description = "Variables to pass into user data template"
   type        = map(string)
-  default     = {}
+  default     = {env="dev-test"}
 }
