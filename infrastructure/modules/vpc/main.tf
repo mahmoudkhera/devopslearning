@@ -63,7 +63,7 @@ resource "aws_subnet" "nginx_subnets" {
   }
 }
 
-# Private Subnets
+
 resource "aws_subnet" "front_subnets" {
   count             = length(var.front_subnets)
   vpc_id            = aws_vpc.main.id
@@ -72,6 +72,19 @@ resource "aws_subnet" "front_subnets" {
 
   tags = {
     Name        = "${var.environment}-front-subnet-${count.index + 1}"
+    Environment = var.environment
+  }
+}
+
+
+resource "aws_subnet" "backend_subnets" {
+  count             = length(var.backend_subnets)
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.backend_subnets[count.index]
+  availability_zone = var.azs[count.index]
+
+  tags = {
+    Name        = "${var.environment}-backend-subnet-${count.index + 1}"
     Environment = var.environment
   }
 }
@@ -135,6 +148,15 @@ resource "aws_route_table" "front_rt" {
   }
 }
 
+resource "aws_route_table" "backend_rt" {
+  count  = length(var.backend_subnets)
+  vpc_id = aws_vpc.main.id
+
+  tags = {
+    Name        = "${var.environment}-backend-rt-${count.index + 1}"
+    Environment = var.environment
+  }
+}
 
 # Route Table Associations
 resource "aws_route_table_association" "public" {

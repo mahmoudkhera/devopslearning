@@ -41,7 +41,33 @@ resource "aws_lb_target_group" "front" {
   }
 }
 
-resource "aws_lb_listener" "internal_alb" {
+resource "aws_lb_target_group" "backend" {
+  name     = "backend-tg"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id
+
+  health_check {
+    enabled             = true
+    healthy_threshold   = 2
+    interval            = 30
+    matcher             = "200"
+    path                = "/api/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = 5
+    unhealthy_threshold = 2
+  }
+
+  tags = {
+    Name        = "${var.name}-tg"
+    Environment = var.environment
+  }
+}
+
+
+
+resource "aws_lb_listener" "main" {
   load_balancer_arn = aws_lb.main.arn
   port              = "80"
   protocol          = "HTTP"
@@ -49,5 +75,23 @@ resource "aws_lb_listener" "internal_alb" {
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.front.arn
+  }
+}
+
+
+
+resource "aws_lb_listener_rule" "backend_rule" {
+  listener_arn = aws_lb_listener.main.arn
+  priority     = 100
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.backend.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/api/*"]
+    }
   }
 }

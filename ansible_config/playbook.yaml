@@ -1,0 +1,47 @@
+---
+
+# generate the inventory file
+- name: Generate inventory file
+  hosts: localhost
+  tags: localhost
+  vars_files:
+    - vars/secrets.yml
+    
+  tasks:
+    - name: Render inventory.ini from template
+      template:
+        src: inventory.ini.j2
+        dest: /home/mkmahmoud/Desktop/devopslearning/ansible_config/inventory.ini
+
+# Play 1 — Configure Nginx Proxy on Machine 
+- name: Configure Nginx Proxy on Machine A
+  hosts: nginx
+  become: true
+  tags: nginx
+  vars_files:
+    - vars/secrets.yml
+    - roles/front/vars/main.yml
+  roles:
+     - role: nginx
+
+
+# Play 2 — Configure front server 
+- name: setup front 
+  hosts: front
+  become: true
+  tags: front
+  vars_files:
+    - vars/secrets.yml
+  roles:
+     - role: front
+
+
+# Play 2 — Configure front server 
+- name: setup backend 
+  hosts: backend
+  become: true
+  tags: backend
+  vars_files:
+    - vars/secrets.yml
+  roles:
+     - role: backend

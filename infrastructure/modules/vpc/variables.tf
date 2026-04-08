@@ -30,6 +30,11 @@ variable "front_subnets"{
   
 }
 
+variable "backend_subnets"{
+  description ="cider blocks for internal load balancer"
+  type  =list(string)
+}
+
 variable "azs" {
   description = "List of availability zones"
   type        = list(string)

@@ -1,0 +1,12 @@
+bastion_host: ""
+nginx_host: ""
+front_host: ""
+backend_host: ""
+
+ansible_user: "ubuntu"
+ssh_key_path: ""
+
+alb_host: ""
+alb_port: 80
+nginx_listen_port: 80
+keepalive: 32

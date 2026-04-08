@@ -22,6 +22,11 @@ variable "front_subnets"{
   default=[ "192.168.7.0/24"]
 }
 
+variable "backend_subnets"{
+  description ="cider blocks for internal load balancer"
+  type  =list(string)
+}
+
 variable "public_subnets" {
   description = "CIDR blocks for public subnets"
   type        = list(string)
@@ -44,6 +49,10 @@ variable "front_subnet_ids" {
   type = list(string)
 }
 
+variable "backend_subnet_ids" {
+  description = "List of nginx subnet IDs"
+  type = list(string)
+}
 
 variable "nginx_rt_ids" {
   description = " the route table for the nginx subnets "
@@ -51,6 +60,11 @@ variable "nginx_rt_ids" {
 }
 
 variable "front_rt_ids" {
+  description = " the route table for the nginx subnets "
+  type = list(string)
+}
+
+variable "backend_rt_ids" {
   description = " the route table for the nginx subnets "
   type = list(string)
 }

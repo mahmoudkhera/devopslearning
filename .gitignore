@@ -1,6 +1,7 @@
 /backend/node_modules
 /backend/.env
-/ansible_config
+/ansible_config/vars/secrets.yml
 /infrastructure/.terraform
 /infrastructure/ec2-key.pem
 /infrastructure/terraform*
+/.env

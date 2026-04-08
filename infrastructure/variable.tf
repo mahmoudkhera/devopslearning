@@ -44,6 +44,12 @@ variable "front_subnets"{
   type  =list(string)
   default=[ "192.168.7.0/24"]
 }
+
+variable "backend_subnets"{
+  description ="cider blocks for internal load balancer"
+  type  =list(string)
+  default=[ "192.168.8.0/24"]
+}
 variable "availability_zones" {
   description = "Availability zones"
   type        = list(string)

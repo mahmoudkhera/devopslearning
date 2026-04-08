@@ -29,14 +29,22 @@ output "public_subnets_ids" {
   description = "List of front subnet IDs"
   value       = aws_subnet.public[*].id
 }
+
+
+output "public_subnet_cidrs" {
+  description = "List of public subnet CIDR blocks"
+  value       = aws_subnet.public[*].cidr_block
+}
+
+
 output "front_subnets_ids" {
   description = "List of front subnet IDs"
   value       = aws_subnet.front_subnets[*].id
 }
 
-output "public_subnet_cidrs" {
-  description = "List of public subnet CIDR blocks"
-  value       = aws_subnet.public[*].cidr_block
+output "backend_subnets_ids" {
+  description = "List of front subnet IDs"
+  value       = aws_subnet.backend_subnets[*].id
 }
 
 
@@ -46,10 +54,7 @@ output "vpc_cidr_block" {
   value       = aws_vpc.main.cidr_block
 } 
 
-# output "private_route_table_ids" {
-#   description = "List of private route table IDs"
-#   value       = aws_route_table.private[*].id
-# }
+
 output "nginx_route_table_ids" {
   description = "List of private route table IDs"
   value       = aws_route_table.nginx_rt[*].id
@@ -58,4 +63,9 @@ output "nginx_route_table_ids" {
 output "front_route_table_ids" {
   description = "List of private route table IDs"
   value       = aws_route_table.front_rt[*].id
+}
+
+output "backend_route_table_ids" {
+  description = "List of private route table IDs"
+  value       = aws_route_table.backend_rt[*].id
 }

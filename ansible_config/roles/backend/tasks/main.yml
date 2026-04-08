@@ -1,0 +1,22 @@
+---
+
+
+
+- name: Create app directory
+  file:
+    path: "/home/ubuntu/app"
+    state: directory
+- name: Copy .env file  
+  copy:
+    src: /home/mkmahmoud/Desktop/devopslearning/.env
+    dest: /home/ubuntu/app/.env
+    mode: '0600'
+- name: Copy docker-compose.yml
+  copy:
+    src: files/docker-compose.yml
+    dest: "/home/ubuntu/app/docker-compose.yml"
+
+- name: Run docker compose
+  command: docker compose up -d
+  args:
+    chdir: "/home/ubuntu/app"

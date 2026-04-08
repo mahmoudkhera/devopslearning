@@ -86,6 +86,15 @@ resource "aws_route" "front_nat" {
 }
 
 
+#  route for front route tables
+resource "aws_route" "backend_nat" {
+  count                = length(var.backend_subnets)
+  route_table_id       = var.backend_rt_ids[count.index]
+  destination_cidr_block = "0.0.0.0/0"
+  network_interface_id   = aws_instance.nat.primary_network_interface_id
+}
+
+
 
 
 
@@ -99,4 +108,10 @@ resource "aws_route_table_association" "front" {
   count          = length(var.front_subnets)
   subnet_id      = var.front_subnet_ids[count.index]
   route_table_id = var.front_rt_ids[count.index]
+}
+
+resource "aws_route_table_association" "backend" {
+  count          = length(var.backend_subnets)
+  subnet_id      = var.backend_subnet_ids[count.index]
+  route_table_id = var.backend_rt_ids[count.index]
 }

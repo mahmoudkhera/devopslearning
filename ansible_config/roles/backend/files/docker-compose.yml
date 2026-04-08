@@ -15,15 +15,3 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-
-  frontend:
-    build: ./frontend
-    image: mahmoudkhera/frontend
-    container_name: inventory-frontend
-    restart: on-failure
-    ports:
-      - "${FRONTEND_PORT}:3000"
-    environment:
-      - HOST=0.0.0.0
-      - PORT=3000
-      - API_URL=${API_URL}

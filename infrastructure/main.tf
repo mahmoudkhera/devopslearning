@@ -34,6 +34,7 @@ module "vpc" {
   internal_alb_subnets=var.internal_alb_subnets
   nginx_subnets = var.nginx_subnets
   front_subnets=var.front_subnets
+  backend_subnets=var.backend_subnets
   azs            = var.availability_zones
 }
 
@@ -93,6 +94,14 @@ module "nat" {
   front_subnet_ids=module.vpc.front_subnets_ids
   nginx_rt_ids=module.vpc.nginx_route_table_ids
   front_rt_ids=module.vpc.front_route_table_ids
+  
+
+  backend_subnets=var.backend_subnets
+  backend_subnet_ids=module.vpc.backend_subnets_ids
+  backend_rt_ids=module.vpc.backend_route_table_ids
+
+
+
 }
 
 
@@ -149,10 +158,33 @@ module "front_asg" {
   user_data_template_path=var.front_user_data
   private_subnet_ids = module.vpc.front_subnets_ids
   security_group_ids = [module.security.front_security_group_id]
-  target_group_arns  = [module.alb.target_group_arn]
+  target_group_arns  = [module.internal_alb.front_target_group_arn]
   instance_type      = var.instance_type
   key_name           = var.key_name
   min_size          = var.asg_min_size
   max_size          = var.asg_max_size
   desired_capacity  = var.asg_desired_capacity
 }
+
+
+
+# Auto Scaling Group Module
+module "backend_asg" {
+  source = "./modules/asg"
+
+  environment         = var.environment
+  name                ="backend"
+  vpc_id             = module.vpc.vpc_id
+  user_data_template_path=var.front_user_data
+  private_subnet_ids = module.vpc.front_subnets_ids
+  security_group_ids = [module.security.backend_security_group_id]
+  target_group_arns  = [module.internal_alb.backend_target_group_arn]
+  instance_type      = var.instance_type
+  key_name           = var.key_name
+  min_size          = var.asg_min_size
+  max_size          = var.asg_max_size
+  desired_capacity  = var.asg_desired_capacity
+}
+
+
+
