@@ -55,8 +55,9 @@ pipeline {
 
                         mkdir -p ansible_config/files
                         
-                        echo "$ENV_FILE" > ansible_config/files/.env
-                        cat ansible_config/files/.env
+                        cp "$ENV_FILE" ansible_config/files/.env
+                        ls -la ansible_config/files/.env
+                        wc -l ansible_config/files/.env
 
                         # Write SSH key
                         mkdir -p /tmp/ansible
