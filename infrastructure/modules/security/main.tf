@@ -143,12 +143,12 @@ resource "aws_security_group" "backend" {
 
 
  # Warning this just for test a data base from neon
-  ingress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  # ingress {
+  #   from_port       = 0
+  #   to_port         = 0
+  #   protocol        = "-1"
+  #   cidr_blocks = ["0.0.0.0/0"]
+  # }
 
 
    ingress {
@@ -167,7 +167,7 @@ resource "aws_security_group" "backend" {
     cidr_blocks   =var.allowed_ssh_cidr_blocks
   }
 
-
+  # only because i use neon database inseted of aws rds
   egress {
     from_port   = 0
     to_port     = 0
@@ -176,7 +176,7 @@ resource "aws_security_group" "backend" {
   }
 
   tags = {
-    Name        = "${var.environment}-front-sg"
+    Name        = "${var.environment}-backend-sg"
     Environment = var.environment
   }
 }
