@@ -50,8 +50,8 @@ pipeline {
                 sshagent(['ec2-ssh-key']) {
                     sh '''
                         # Write vault password
-                        echo "$VAULT_PASS" > /tmp/vault_pass.txt
-                        chmod 600 /tmp/vault_pass.txt
+                        echo "$VAULT_PASS" > vault_pass.txt
+                        chmod 600 vault_pass.txt
 
                         # write .env file
                         echo "$ENV_FILE" >ansible_config/.env
@@ -65,7 +65,7 @@ pipeline {
                     // Render inventory from template
                     sh '''
                         ansible-playbook ansible_config/generate_inventory.yaml \
-                            --vault-password-file /tmp/vault_pass.txt
+                            --vault-password-file vault_pass.txt
                     '''
                 }
 
@@ -90,14 +90,14 @@ pipeline {
             steps {
                 sshagent(['ec2-ssh-key']) {
                     sh '''
-                        echo "$VAULT_PASS" > /tmp/vault_pass.txt
-                        chmod 600 /tmp/vault_pass.txt
+                        echo "$VAULT_PASS" > vault_pass.txt
+                        chmod 600 vault_pass.txt
                         ansible-playbook -i ansible_config/inventory.ini \
                             ansible_config/playbook.yaml \
                             --tags front \
                             --private-key ${SSH_KEY_PATH} \
-                            --vault-password-file /tmp/vault_pass.txt
-                        rm -f /tmp/vault_pass.txt
+                            --vault-password-file vault_pass.txt
+                        rm -f vault_pass.txt
                     '''
                 }
             }
@@ -118,31 +118,31 @@ pipeline {
             steps {
                 sshagent(['ec2-ssh-key']) {
                     sh '''
-                        echo "$VAULT_PASS" > /tmp/vault_pass.txt
-                        chmod 600 /tmp/vault_pass.txt
+                        echo "$VAULT_PASS" > vault_pass.txt
+                        chmod 600 vault_pass.txt
                         ansible-playbook -i ansible_config/inventory.ini \
                             ansible_config/splaybook.yaml  \
                             --tags backend \
                             --private-key ${SSH_KEY_PATH} \
-                            --vault-password-file /tmp/vault_pass.txt
-                        rm -f /tmp/vault_pass.txt
+                            --vault-password-file vault_pass.txt
+                        rm -f vault_pass.txt
                     '''
                 }
             }
         }
 
         stage('Deploy Ansible') {
-            when { expression { env.ANSIBLE_CHANGED != '0' } }
+            // when { expression { env.ANSIBLE_CHANGED != '0' } }
             steps {
                 sshagent(['ec2-ssh-key']) {
                     sh '''
-                        echo "$VAULT_PASS" > /tmp/vault_pass.txt
-                        chmod 600 /tmp/vault_pass.txt
+                        echo "$VAULT_PASS" > vault_pass.txt
+                        chmod 600 vault_pass.txt
                         ansible-playbook -i ansible_config/inventory.ini \
                             ansible_config/playbook.yaml  \
                             --private-key ${SSH_KEY_PATH} \
-                            --vault-password-file /tmp/vault_pass.txt
-                        rm -f /tmp/vault_pass.txt
+                            --vault-password-file vault_pass.txt
+                        rm -f vault_pass.txt
                     '''
                 }
             }
@@ -152,7 +152,7 @@ pipeline {
 
     post {
         always {
-            sh 'rm -f /tmp/vault_pass.txt /tmp/ansible/ssh_key.pem'
+            sh 'rm -f vault_pass.txt /tmp/ansible/ssh_key.pem'
         }
     }
 }
