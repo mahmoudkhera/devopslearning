@@ -8,7 +8,7 @@
     state: directory
 - name: Copy .env file  
   copy:
-    src: /home/mkmahmoud/Desktop/devopslearning/.env
+    src: devopslearning/.env
     dest: /home/ubuntu/app/.env
     mode: '0600'
 - name: Copy docker-compose.yml

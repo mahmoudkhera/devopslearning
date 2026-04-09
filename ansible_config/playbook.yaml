@@ -11,7 +11,7 @@
     - name: Render inventory.ini from template
       template:
         src: inventory.ini.j2
-        dest: /home/mkmahmoud/Desktop/devopslearning/ansible_config/inventory.ini
+        dest: ansible_config/inventory.ini
 
 # Play 1 — Configure Nginx Proxy on Machine 
 - name: Configure Nginx Proxy on Machine A
