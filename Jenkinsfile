@@ -53,8 +53,8 @@ pipeline {
                         echo "$VAULT_PASS" > vault_pass.txt
                         chmod 600 vault_pass.txt
 
-                        # write .env file
-                        echo "$ENV_FILE" >ansible_config/files/.env
+                        mkdir -p ansible_config/files
+                        echo "$ENV_FILE" > ansible_config/files/.env
 
                         # Write SSH key
                         mkdir -p /tmp/ansible
@@ -156,6 +156,7 @@ pipeline {
     post {
         always {
             sh 'rm -f vault_pass.txt /tmp/ansible/ssh_key.pem'
+             sh 'rm -f ansible_config/files/.env'
         }
     }
 }
