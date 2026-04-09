@@ -117,7 +117,7 @@ variable "nginx_user_data_vars" {
 variable "front_user_data" {
   description = "Path to user data template file"
   type        = string
-  default = "./templates/front_user_data.sh.tpl"
+  default = "./templates/app_user_data.sh.tpl"
 }
 variable "front_user_data_vars" {
   description = "Variables to pass into user data template"
