@@ -54,7 +54,9 @@ pipeline {
                         chmod 600 vault_pass.txt
 
                         mkdir -p ansible_config/files
+                        
                         echo "$ENV_FILE" > ansible_config/files/.env
+                        echo ansible_config/files/.env
 
                         # Write SSH key
                         mkdir -p /tmp/ansible
