@@ -1,0 +1,12 @@
+# generate the inventory file
+- name: Generate inventory file
+  hosts: localhost
+  tags: localhost
+  vars_files:
+    - vars/secrets.yml
+    
+  tasks:
+    - name: Render inventory.ini from template
+      template:
+        src: inventory.ini.j2
+        dest: inventory.ini

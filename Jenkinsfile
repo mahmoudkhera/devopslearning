@@ -3,6 +3,8 @@ pipeline {
 
     environment {
         VAULT_PASS = credentials('ansible-key')
+
+        ENV_FILE  = credentials('.env')
     }
 
     stages {
@@ -51,6 +53,9 @@ pipeline {
                         echo "$VAULT_PASS" > /tmp/vault_pass.txt
                         chmod 600 /tmp/vault_pass.txt
 
+                        # write .env file
+                        echo "$ENV_FILE" >ansible_config/.env
+
                         # Write SSH key
                         mkdir -p /tmp/ansible
                         ssh-add -L > /tmp/ansible/ssh_key.pem
@@ -59,26 +64,26 @@ pipeline {
 
                     // Render inventory from template
                     sh '''
-                        ansible-playbook ansible_config/generate_inventory.yml \
+                        ansible-playbook ansible_config/generate_inventory.yaml \
                             --vault-password-file /tmp/vault_pass.txt
                     '''
                 }
 
                 script {
-                    env.SSH_KEY_PATH = '/tmp/ansible/ssh_key.pem'  // ← available to all stages
+                    env.SSH_KEY_PATH = '/tmp/ansible/ssh_key.pem'  
                 }
             }
         }
 
-        stage('Build Frontend') {
-            when { expression { env.FRONTEND_CHANGED != '0' } }
-            steps {
-                sh '''
-                    docker build -t mahmoudkhera/frontend ./frontend
-                    docker push mahmoudkhera/frontend
-                '''
-            }
-        }
+        // stage('Build Frontend') {
+        //     when { expression { env.FRONTEND_CHANGED != '0' } }
+        //     steps {
+        //         sh '''
+        //             docker build -t mahmoudkhera/frontend ./frontend
+        //             docker push mahmoudkhera/frontend
+        //         '''
+        //     }
+        // }
 
         stage('Deploy Frontend') {
             when { expression { env.FRONTEND_CHANGED != '0' } }
@@ -88,7 +93,7 @@ pipeline {
                         echo "$VAULT_PASS" > /tmp/vault_pass.txt
                         chmod 600 /tmp/vault_pass.txt
                         ansible-playbook -i ansible_config/inventory.ini \
-                            ansible_config/site.yml \
+                            ansible_config/playbook.yaml \
                             --tags front \
                             --private-key ${SSH_KEY_PATH} \
                             --vault-password-file /tmp/vault_pass.txt
@@ -98,15 +103,15 @@ pipeline {
             }
         }
 
-        stage('Build Backend') {
-            when { expression { env.BACKEND_CHANGED != '0' } }
-            steps {
-                sh '''
-                    docker build -t mahmoudkhera/backend ./backend
-                    docker push mahmoudkhera/backend
-                '''
-            }
-        }
+        // stage('Build Backend') {
+        //     when { expression { env.BACKEND_CHANGED != '0' } }
+        //     steps {
+        //         sh '''
+        //             docker build -t mahmoudkhera/backend ./backend
+        //             docker push mahmoudkhera/backend
+        //         '''
+        //     }
+        // }
 
         stage('Deploy Backend') {
             when { expression { env.BACKEND_CHANGED != '0' } }
@@ -116,7 +121,7 @@ pipeline {
                         echo "$VAULT_PASS" > /tmp/vault_pass.txt
                         chmod 600 /tmp/vault_pass.txt
                         ansible-playbook -i ansible_config/inventory.ini \
-                            ansible_config/site.yml \
+                            ansible_config/splaybook.yaml  \
                             --tags backend \
                             --private-key ${SSH_KEY_PATH} \
                             --vault-password-file /tmp/vault_pass.txt
@@ -134,7 +139,7 @@ pipeline {
                         echo "$VAULT_PASS" > /tmp/vault_pass.txt
                         chmod 600 /tmp/vault_pass.txt
                         ansible-playbook -i ansible_config/inventory.ini \
-                            ansible_config/site.yml \
+                            ansible_config/playbook.yaml  \
                             --private-key ${SSH_KEY_PATH} \
                             --vault-password-file /tmp/vault_pass.txt
                         rm -f /tmp/vault_pass.txt

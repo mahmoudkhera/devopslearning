@@ -1,18 +1,4 @@
 ---
-
-# generate the inventory file
-- name: Generate inventory file
-  hosts: localhost
-  tags: localhost
-  vars_files:
-    - vars/secrets.yml
-    
-  tasks:
-    - name: Render inventory.ini from template
-      template:
-        src: inventory.ini.j2
-        dest: ansible_config/inventory.ini
-
 # Play 1 — Configure Nginx Proxy on Machine 
 - name: Configure Nginx Proxy on Machine A
   hosts: nginx
