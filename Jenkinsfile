@@ -98,6 +98,8 @@ pipeline {
                             --private-key ${SSH_KEY_PATH} \
                             --vault-password-file vault_pass.txt
                         rm -f vault_pass.txt
+                        rm -f /ansible_config/inventory.ini
+
                     '''
                 }
             }
@@ -126,6 +128,7 @@ pipeline {
                             --private-key ${SSH_KEY_PATH} \
                             --vault-password-file vault_pass.txt
                         rm -f vault_pass.txt
+                        rm -f /ansible_config/inventory.ini
                     '''
                 }
             }
@@ -143,6 +146,7 @@ pipeline {
                             --private-key ${SSH_KEY_PATH} \
                             --vault-password-file vault_pass.txt
                         rm -f vault_pass.txt
+                        rm -f /ansible_config/inventory.ini
                     '''
                 }
             }
