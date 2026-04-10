@@ -5,6 +5,7 @@ pipeline {
         VAULT_PASS = credentials('ansible-key')
 
         ENV_FILE  = credentials('.env')
+        ANSIBLE_SECRESTS = credentials('ansible-secrets')
     }
 
     stages {
@@ -56,8 +57,12 @@ pipeline {
                         mkdir -p ansible_config/files
                         
                         cp "$ENV_FILE" ansible_config/files/.env
-                        ls -la ansible_config/files/.env
                         wc -l ansible_config/files/.env
+
+                        cp "$ENV_FILE" ansible_config/vars/secrets.yml
+                        wc -l ansible_config/vars/secrets.yml
+
+
 
                         # Write SSH key
                         mkdir -p /tmp/ansible
@@ -160,6 +165,7 @@ pipeline {
         always {
             sh 'rm -f vault_pass.txt /tmp/ansible/ssh_key.pem'
              sh 'rm -f ansible_config/files/.env'
+             sh 'rm -f ansible_config/vars/secrets.yml'
         }
     }
 }
