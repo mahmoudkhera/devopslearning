@@ -59,7 +59,7 @@ pipeline {
                         cp "$ENV_FILE" ansible_config/files/.env
                         wc -l ansible_config/files/.env
 
-                        cp "$ENV_FILE" ansible_config/vars/secrets.yml
+                        cp "$ANSIBLE_SECRESTS" ansible_config/vars/secrets.yml
                         wc -l ansible_config/vars/secrets.yml
 
 
